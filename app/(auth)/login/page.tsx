@@ -33,7 +33,7 @@ export default function LoginPage() {
         throw new Error(result.error || "Login failed.");
       }
 
-      window.location.href = "/dashboard";
+      window.location.href = "/user-dashboard";
     } catch (error) {
       console.error(error);
       alert(error instanceof Error ? error.message : "Unable to sign in right now.");

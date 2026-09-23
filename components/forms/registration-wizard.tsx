@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -418,6 +419,7 @@ export function RegistrationWizard() {
             <h3 className="mt-4 text-2xl font-semibold text-slate-900">Registration submitted successfully.</h3>
             <p className="mt-2 text-slate-600">Application reference: COS-2026-000184</p>
             <p className="mt-1 text-slate-600">Status: Pending Review</p>
+            <Link href="/login" className="mt-6 inline-flex rounded-full bg-sky-600 px-4 py-2 text-sm font-semibold text-white hover:bg-sky-500">Continue to sign in</Link>
           </div>
         );
     }
