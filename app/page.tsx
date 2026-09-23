@@ -42,16 +42,6 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900">
       <section className="mx-auto max-w-7xl px-6 py-6 lg:px-10">
-        <nav className="mb-10 flex flex-col gap-4 rounded-[24px] border border-slate-200 bg-white/90 px-4 py-3 shadow-sm backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between sm:rounded-full sm:px-5">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-600 text-sm font-bold text-white shadow-sm">COS</div>
-            <div>
-              <p className="text-[10px] uppercase tracking-[0.24em] text-slate-500">Care Organisation</p>
-              <h1 className="text-base font-semibold text-slate-900">System</h1>
-            </div>
-          </div>
-        </nav>
-
         <div className="grid gap-8 rounded-[32px] border border-slate-200 bg-white p-6 shadow-xl shadow-slate-200/50 lg:grid-cols-[1.15fr_0.85fr] lg:p-10">
           <div>
             <div className="inline-flex items-center gap-2 rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-sky-700">
