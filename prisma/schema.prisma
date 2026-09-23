@@ -1,0 +1,520 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum RoleType {
+  SUPER_ADMIN
+  ORGANISATION_ADMIN
+  REGISTERED_MANAGER
+  CARE_MANAGER
+  HR_ADMIN
+  CARE_WORKER
+  FINANCE
+  CLIENT
+  FAMILY_REPRESENTATIVE
+}
+
+enum RegistrationStatus {
+  DRAFT
+  SUBMITTED
+  PENDING_REVIEW
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+  CHANGES_REQUESTED
+  SUSPENDED
+}
+
+enum DocumentStatus {
+  PENDING_REVIEW
+  UNDER_REVIEW
+  VERIFIED
+  REJECTED
+  EXPIRED
+  REPLACEMENT_REQUIRED
+}
+
+enum VerificationStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+  EXPIRED
+}
+
+enum IncidentType {
+  ACCIDENT
+  INJURY
+  SAFEGUARDING
+  MEDICATION_INCIDENT
+  MISSED_VISIT
+  BEHAVIOURAL
+  OTHER
+}
+
+enum IncidentStatus {
+  OPEN
+  INVESTIGATING
+  ACTION_REQUIRED
+  CLOSED
+}
+
+enum VisitStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  MISSED
+  LATE
+  CANCELLED
+}
+
+enum ShiftStatus {
+  OPEN
+  ASSIGNED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum NotificationType {
+  NEW_REGISTRATION
+  DOCUMENT_APPROVED
+  DOCUMENT_REJECTED
+  DOCUMENT_EXPIRING
+  TRAINING_EXPIRING
+  SHIFT_ASSIGNMENT
+  INCIDENT_UPDATE
+  CARE_PLAN_REVIEW
+  ADMIN_MESSAGE
+}
+
+model Organisation {
+  id          String   @id @default(uuid())
+  name        String
+  email       String?  @unique
+  phone       String?
+  address     String?
+  city        String?
+  postcode    String?
+  country     String?  @default("United Kingdom")
+  settings    Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  users       User[]
+  registrations RegistrationApplication[]
+  clients     Client[]
+  carePlans   CarePlan[]
+  incidents   Incident[]
+  documents   Document[]
+  notifications Notification[]
+}
+
+model Permission {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  label       String
+  description String?
+  roles       UserRole[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Role {
+  id          String      @id @default(uuid())
+  name        RoleType    @unique
+  label       String
+  description String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  users       UserRole[]
+}
+
+model User {
+  id                  String   @id @default(uuid())
+  organisationId      String?
+  organisation        Organisation? @relation(fields: [organisationId], references: [id])
+  firstName           String
+  lastName            String
+  email              String   @unique
+  phone              String?
+  passwordHash       String
+  isEmailVerified    Boolean  @default(false)
+  isActive           Boolean  @default(true)
+  isSuspended        Boolean  @default(false)
+  emailVerificationToken String?
+  passwordResetToken String?
+  lastLoginAt        DateTime?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  deletedAt          DateTime?
+  roles              UserRole[]
+  staffProfile       StaffProfile?
+  registrations      RegistrationApplication[]
+  documents          Document[]
+  notifications     Notification[]
+  auditLogs          AuditLog[]
+  incidents         Incident[]
+  carePlans         CarePlan[]
+  visits            Visit[]
+  shifts            Shift[]
+  medicationAdmin   MedicationAdministration[]
+
+  @@index([email])
+  @@index([organisationId])
+}
+
+model UserRole {
+  id           String      @id @default(uuid())
+  userId       String
+  roleId       String
+  permissionId String?
+  user         User        @relation(fields: [userId], references: [id])
+  role         Role        @relation(fields: [roleId], references: [id])
+  permission   Permission? @relation(fields: [permissionId], references: [id])
+  createdAt    DateTime    @default(now())
+
+  @@unique([userId, roleId])
+  @@index([userId])
+  @@index([roleId])
+}
+
+model RegistrationApplication {
+  id                 String             @id @default(uuid())
+  userId             String?
+  user               User?              @relation(fields: [userId], references: [id])
+  organisationId     String?
+  organisation       Organisation?      @relation(fields: [organisationId], references: [id])
+  applicationRef     String            @unique
+  status             RegistrationStatus @default(DRAFT)
+  firstName          String
+  lastName           String
+  email              String
+  phone              String?
+  dateOfBirth        DateTime?
+  gender             String?
+  address            String?
+  city               String?
+  postcode           String?
+  country            String?
+  emergencyContact   String?
+  employmentRole     String?
+  employmentInfo     Json?
+  declarations       Json?
+  adminNotes         String?
+  submittedAt        DateTime?
+  reviewedAt         DateTime?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  documents          Document[]
+  auditLogs          AuditLog[]
+
+  @@index([status])
+  @@index([email])
+}
+
+model StaffProfile {
+  id             String   @id @default(uuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id])
+  jobTitle       String?
+  employeeNumber String?
+  startDate      DateTime?
+  department     String?
+  availability   Json?
+  notes          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  qualifications Qualification[]
+  trainings      TrainingRecord[]
+  dbsRecords     DBSRecord[]
+}
+
+model Client {
+  id               String          @id @default(uuid())
+  organisationId    String?
+  organisation      Organisation?    @relation(fields: [organisationId], references: [id])
+  firstName         String
+  lastName          String
+  dateOfBirth      DateTime?
+  gender            String?
+  email            String?
+  phone            String?
+  address          String?
+  city             String?
+  postcode         String?
+  country          String?
+  careNeeds        Json?
+  riskLevel        String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  contacts         ClientContact[]
+  carePlans        CarePlan[]
+  incidents        Incident[]
+  visits           Visit[]
+  medications      Medication[]
+  documents        Document[]
+  riskAssessments  RiskAssessment[]
+
+  @@index([organisationId])
+}
+
+model ClientContact {
+  id        String   @id @default(uuid())
+  clientId  String
+  client    Client   @relation(fields: [clientId], references: [id])
+  name      String
+  relation  String?
+  phone     String?
+  email     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Document {
+  id                    String               @id @default(uuid())
+  organisationId        String?
+  organisation          Organisation?        @relation(fields: [organisationId], references: [id])
+  userId                String?
+  user                  User?                @relation(fields: [userId], references: [id])
+  clientId              String?
+  client                Client?              @relation(fields: [clientId], references: [id])
+  registrationId        String?
+  registration          RegistrationApplication? @relation(fields: [registrationId], references: [id])
+  category              String
+  fileName              String
+  mimeType              String
+  sizeBytes             Int
+  storageKey            String
+  status                DocumentStatus       @default(PENDING_REVIEW)
+  verificationStatus    VerificationStatus   @default(PENDING)
+  expiryDate            DateTime?
+  uploadedAt            DateTime             @default(now())
+  reviewNotes           String?
+  metadata              Json?
+  isDeleted             Boolean              @default(false)
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt
+
+  @@index([userId])
+  @@index([clientId])
+  @@index([registrationId])
+  @@index([status])
+}
+
+model DocumentVerification {
+  id          String   @id @default(uuid())
+  documentId  String
+  verifiedBy  String?
+  status      VerificationStatus @default(PENDING)
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Qualification {
+  id             String       @id @default(uuid())
+  staffProfileId String
+  staffProfile   StaffProfile @relation(fields: [staffProfileId], references: [id])
+  title          String
+  institution    String?
+  level          String?
+  completionDate DateTime?
+  expiryDate     DateTime?
+  notes          String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model TrainingRecord {
+  id             String       @id @default(uuid())
+  staffProfileId String
+  staffProfile   StaffProfile @relation(fields: [staffProfileId], references: [id])
+  title          String
+  provider       String?
+  completedAt    DateTime?
+  expiryDate     DateTime?
+  status         String?      @default("Current")
+  notes          String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model DBSRecord {
+  id             String       @id @default(uuid())
+  staffProfileId String
+  staffProfile   StaffProfile @relation(fields: [staffProfileId], references: [id])
+  status         String?
+  dateChecked    DateTime?
+  expiryDate     DateTime?
+  notes          String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model CarePlan {
+  id             String          @id @default(uuid())
+  organisationId String?
+  organisation   Organisation?   @relation(fields: [organisationId], references: [id])
+  clientId       String
+  client         Client          @relation(fields: [clientId], references: [id])
+  createdById    String?
+  createdBy      User?           @relation(fields: [createdById], references: [id])
+  title          String
+  status         String?         @default("Active")
+  goals          Json?
+  needs          Json?
+  preferences    Json?
+  supportNeeds   Json?
+  reviewDate     DateTime?
+  staffInstructions Json?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  versions       CarePlanVersion[]
+  riskAssessments RiskAssessment[]
+}
+
+model CarePlanVersion {
+  id          String   @id @default(uuid())
+  carePlanId  String
+  carePlan    CarePlan @relation(fields: [carePlanId], references: [id])
+  version     Int
+  summary     String?
+  changes     Json?
+  createdAt   DateTime @default(now())
+}
+
+model RiskAssessment {
+  id          String    @id @default(uuid())
+  carePlanId  String?
+  carePlan    CarePlan? @relation(fields: [carePlanId], references: [id])
+  clientId    String?
+  client      Client?   @relation(fields: [clientId], references: [id])
+  title       String
+  level       String?
+  summary     String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Medication {
+  id           String   @id @default(uuid())
+  clientId     String
+  client       Client   @relation(fields: [clientId], references: [id])
+  name         String
+  dosage       String?
+  frequency    String?
+  startDate    DateTime?
+  endDate      DateTime?
+  notes        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  administrations MedicationAdministration[]
+}
+
+model MedicationAdministration {
+  id           String     @id @default(uuid())
+  medicationId  String
+  medication    Medication @relation(fields: [medicationId], references: [id])
+  administeredById String?
+  administeredBy User? @relation(fields: [administeredById], references: [id])
+  administeredAt DateTime?
+  status       String?    @default("Given")
+  notes        String?
+  createdAt    DateTime   @default(now())
+}
+
+model Visit {
+  id                String    @id @default(uuid())
+  clientId          String
+  client            Client    @relation(fields: [clientId], references: [id])
+  assignedStaffId   String?
+  assignedStaff     User?     @relation(fields: [assignedStaffId], references: [id])
+  scheduledStart    DateTime?
+  scheduledEnd      DateTime?
+  actualStart       DateTime?
+  actualEnd         DateTime?
+  status            VisitStatus @default(SCHEDULED)
+  notes             String?
+  tasksCompleted    Json?
+  location          String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+}
+
+model Shift {
+  id              String     @id @default(uuid())
+  staffId         String?
+  staff           User?      @relation(fields: [staffId], references: [id])
+  clientId        String?
+  title           String
+  start           DateTime
+  end             DateTime
+  status          ShiftStatus @default(OPEN)
+  breaks          Json?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
+
+model Incident {
+  id             String       @id @default(uuid())
+  organisationId String?
+  organisation   Organisation? @relation(fields: [organisationId], references: [id])
+  clientId       String?
+  client         Client?      @relation(fields: [clientId], references: [id])
+  reportedById   String?
+  reportedBy     User?        @relation(fields: [reportedById], references: [id])
+  type           IncidentType
+  title          String
+  description    String?
+  immediateAction String?
+  followUp       String?
+  status         IncidentStatus @default(OPEN)
+  occurredAt     DateTime?
+  attachments    Json?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model Notification {
+  id             String          @id @default(uuid())
+  userId         String?
+  user           User?           @relation(fields: [userId], references: [id])
+  organisationId String?
+  organisation   Organisation?   @relation(fields: [organisationId], references: [id])
+  type           NotificationType
+  title          String
+  message        String
+  isRead         Boolean         @default(false)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  readAt         DateTime?
+}
+
+model AuditLog {
+  id             String   @id @default(uuid())
+  userId         String?
+  user           User?    @relation(fields: [userId], references: [id])
+  registrationId String?
+  registration   RegistrationApplication? @relation(fields: [registrationId], references: [id])
+  action         String
+  resource       String
+  ipAddress      String?
+  previousValue  Json?
+  newValue       Json?
+  createdAt      DateTime @default(now())
+
+  @@index([userId])
+  @@index([resource])
+}
+
+model SystemSetting {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
