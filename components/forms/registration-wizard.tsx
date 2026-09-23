@@ -86,6 +86,7 @@ export function RegistrationWizard() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<Record<string, File | null>>({});
+  const [applicationRef, setApplicationRef] = useState("");
   const inputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
   const form = useForm<WizardValues>({
@@ -200,7 +201,7 @@ export function RegistrationWizard() {
         throw new Error(result.error || "Registration failed.");
       }
 
-      console.log("Registration submitted:", result);
+      setApplicationRef(result.applicationRef);
       setCurrentStep(steps.length - 1);
     } catch (error) {
       console.error(error);
@@ -417,8 +418,9 @@ export function RegistrationWizard() {
           <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-8 text-center">
             <Check className="mx-auto h-12 w-12 text-emerald-600" />
             <h3 className="mt-4 text-2xl font-semibold text-slate-900">Registration submitted successfully.</h3>
-            <p className="mt-2 text-slate-600">Application reference: COS-2026-000184</p>
-            <p className="mt-1 text-slate-600">Status: Pending Review</p>
+            <p className="mt-2 text-slate-600">Application reference: {applicationRef}</p>
+            <p className="mt-1 text-slate-600">Status: Pending admin review</p>
+            <p className="mt-3 text-sm text-slate-600">Please wait for an administrator to accept your application. The $50 registration fee will become available after approval.</p>
             <Link href="/login" className="mt-6 inline-flex rounded-full bg-sky-600 px-4 py-2 text-sm font-semibold text-white hover:bg-sky-500">Continue to sign in</Link>
           </div>
         );
@@ -471,7 +473,7 @@ export function RegistrationWizard() {
                   Continue <ArrowRight className="h-4 w-4" />
                 </button>
               ) : currentStep === steps.length - 2 ? (
-                <button type="button" onClick={onSubmit} className="rounded-full bg-sky-600 px-4 py-2 text-sm font-semibold text-white hover:bg-sky-500">Submit Registration</button>
+                <button type="button" onClick={onSubmit} className="rounded-full bg-sky-600 px-4 py-2 text-sm font-semibold text-white hover:bg-sky-500">Submit for review</button>
               ) : null}
             </div>
           </div>

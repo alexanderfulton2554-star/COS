@@ -46,6 +46,13 @@ enum VerificationStatus {
   EXPIRED
 }
 
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
 enum IncidentType {
   ACCIDENT
   INJURY
@@ -204,6 +211,9 @@ model RegistrationApplication {
   employmentRole     String?
   employmentInfo     Json?
   declarations       Json?
+  paymentStatus      PaymentStatus      @default(PENDING)
+  stripeSessionId    String?            @unique
+  paidAt             DateTime?
   adminNotes         String?
   submittedAt        DateTime?
   reviewedAt         DateTime?

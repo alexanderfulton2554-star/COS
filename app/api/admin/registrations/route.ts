@@ -5,6 +5,7 @@ import { registrationDecisionSchema } from '@/lib/validation/admin';
 export async function GET() {
   try {
     const registrations = await prisma.registrationApplication.findMany({
+      where: { status: { not: 'DRAFT' } },
       orderBy: { createdAt: 'desc' },
       include: {
         user: {

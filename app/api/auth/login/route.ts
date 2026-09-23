@@ -27,10 +27,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'This account is suspended.' }, { status: 403 });
     }
 
-    if (!user.isEmailVerified) {
-      return NextResponse.json({ error: 'Please verify your email before signing in.' }, { status: 403 });
-    }
-
     const token = await createSessionToken({
       userId: user.id,
       email: user.email,
