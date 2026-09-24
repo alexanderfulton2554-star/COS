@@ -18,7 +18,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "You must be signed in to pay this fee." }, { status: 401 });
     }
 
-    const session = await verifySessionToken(token);
+    const authSession = await verifySessionToken(token);
     const body = await request.json();
     const applicationRef = typeof body.applicationRef === "string" ? body.applicationRef : "";
 
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Registration application not found." }, { status: 404 });
     }
 
-    if (application.userId !== session.userId) {
+    if (application.userId !== authSession.userId) {
       return NextResponse.json({ error: "You cannot pay another user's application." }, { status: 403 });
     }
 
@@ -49,7 +49,7 @@ export async function POST(request: Request) {
 
     const stripe = new Stripe(secretKey);
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || new URL(request.url).origin;
-    const session = await stripe.checkout.sessions.create({
+    const checkoutSession = await stripe.checkout.sessions.create({
       mode: "payment",
       customer_email: application.email,
       line_items: [{
@@ -67,10 +67,10 @@ export async function POST(request: Request) {
 
     await prisma.registrationApplication.update({
       where: { id: application.id },
-      data: { stripeSessionId: session.id },
+      data: { stripeSessionId: checkoutSession.id },
     });
 
-    return NextResponse.json({ url: session.url });
+    return NextResponse.json({ url: checkoutSession.url });
   } catch (error) {
     console.error("Stripe checkout error:", error);
     return NextResponse.json({ error: "Unable to start secure payment checkout." }, { status: 500 });
