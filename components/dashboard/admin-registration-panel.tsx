@@ -13,6 +13,9 @@ type Registration = {
   phone?: string | null;
   createdAt: string;
   adminNotes?: string | null;
+  paymentStatus?: string;
+  paymentNetwork?: string | null;
+  paymentTxHash?: string | null;
   user?: {
     firstName?: string | null;
     lastName?: string | null;
@@ -90,6 +93,18 @@ export function AdminRegistrationPanel() {
     }
   };
 
+  const verifyPayment = async (id: string, decision: "VERIFY" | "REJECT") => {
+    const response = await fetch("/api/admin/payments", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, decision }),
+    });
+
+    if (response.ok) {
+      setRegistrations((current) => current.map((item) => item.id === id ? { ...item, paymentStatus: decision === "VERIFY" ? "PAID" : "FAILED", paymentTxHash: decision === "VERIFY" ? item.paymentTxHash : null } : item));
+    }
+  };
+
   if (loading) {
     return <div className="rounded-2xl border border-slate-200 bg-white p-6 text-slate-600">Loading registrations…</div>;
   }
@@ -145,6 +160,18 @@ export function AdminRegistrationPanel() {
                   </span>
                 </div>
               </div>
+              {application.paymentTxHash && (
+                <div className="mt-4 rounded-xl border border-sky-200 bg-sky-50 p-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-700">Crypto payment · {application.paymentNetwork}</p>
+                  <p className="mt-2 break-all font-mono text-xs text-slate-700">{application.paymentTxHash}</p>
+                  {application.paymentStatus !== "PAID" && (
+                    <div className="mt-3 flex gap-2">
+                      <button onClick={() => verifyPayment(application.id, "VERIFY")} className="rounded-lg bg-emerald-600 px-3 py-2 text-xs font-semibold text-white hover:bg-emerald-500">Verify $50 payment</button>
+                      <button onClick={() => verifyPayment(application.id, "REJECT")} className="rounded-lg border border-red-200 bg-white px-3 py-2 text-xs font-semibold text-red-700 hover:bg-red-50">Reject payment</button>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           ))
         )}

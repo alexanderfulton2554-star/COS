@@ -53,6 +53,11 @@ enum PaymentStatus {
   REFUNDED
 }
 
+enum CryptoNetwork {
+  TRC20
+  BEP20
+}
+
 enum IncidentType {
   ACCIDENT
   INJURY
@@ -212,7 +217,8 @@ model RegistrationApplication {
   employmentInfo     Json?
   declarations       Json?
   paymentStatus      PaymentStatus      @default(PENDING)
-  stripeSessionId    String?            @unique
+  paymentNetwork     CryptoNetwork?
+  paymentTxHash      String?            @unique
   paidAt             DateTime?
   adminNotes         String?
   submittedAt        DateTime?

@@ -7,16 +7,21 @@ export async function GET() {
     const registrations = await prisma.registrationApplication.findMany({
       where: { status: { not: 'DRAFT' } },
       orderBy: { createdAt: 'desc' },
-      include: {
+      select: {
+        id: true,
+        applicationRef: true,
+        status: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        phone: true,
+        createdAt: true,
+        adminNotes: true,
+        paymentStatus: true,
+        paymentNetwork: true,
+        paymentTxHash: true,
         user: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            email: true,
-            phone: true,
-            isActive: true,
-          },
+          select: { id: true, firstName: true, lastName: true, email: true, phone: true, isActive: true },
         },
       },
     });
