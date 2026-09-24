@@ -3,125 +3,63 @@ import {
   ArrowRight,
   BadgeCheck,
   BriefcaseBusiness,
-  ClipboardCheck,
-  HeartPulse,
+  HeartHandshake,
+  HouseHeart,
+  Phone,
   ShieldCheck,
   Stethoscope,
   Users,
 } from "lucide-react";
 
-const featureCards = [
-  {
-    title: "Client-led care planning",
-    description: "Track person-centred care plans, risk indicators, and outcomes in one operational view.",
-    icon: HeartPulse,
-    accent: "bg-rose-100 text-rose-700",
-  },
-  {
-    title: "Workforce and compliance",
-    description: "Keep staffing, training, DBS checks, and scheduling aligned with regulatory duties.",
-    icon: ShieldCheck,
-    accent: "bg-sky-100 text-sky-700",
-  },
-  {
-    title: "Operational confidence",
-    description: "Monitor incidents, document status, and service quality with real-time oversight.",
-    icon: ClipboardCheck,
-    accent: "bg-emerald-100 text-emerald-700",
-  },
+const services = [
+  { title: "Residential care", description: "A safe, welcoming environment with support shaped around each person.", icon: HouseHeart, tone: "bg-rose-100 text-rose-700" },
+  { title: "Person-centred support", description: "Daily routines, wellbeing, and independence are treated with dignity and respect.", icon: HeartHandshake, tone: "bg-emerald-100 text-emerald-700" },
+  { title: "Qualified care teams", description: "Experienced people, clear standards, and thoughtful communication with families.", icon: Stethoscope, tone: "bg-sky-100 text-sky-700" },
 ];
 
-const trustPoints = [
-  "CQC-ready documentation workflows",
-  "GDPR-aware staff data controls",
-  "Multi-site oversight for growing providers",
-  "Live intake and registration review",
+const recruitmentRoles = [
+  "Care Worker · 6135",
+  "Senior Care Worker · 6136",
+  "Registered Nurse · 2231",
+  "Social Worker · 2461",
 ];
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900">
-      <section className="mx-auto max-w-7xl px-6 py-6 lg:px-10">
-        <div className="rounded-[32px] border border-slate-200 bg-white p-6 shadow-xl shadow-slate-200/50 lg:p-10">
-          <div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-sky-700">
-              <BadgeCheck className="h-3.5 w-3.5" /> Trusted care operations
-            </div>
-
-            <h2 className="mt-5 max-w-xl text-3xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
-              Modern support for safe, compliant care delivery.
-            </h2>
-
-            <p className="mt-5 max-w-xl text-lg text-slate-600">
-              COS brings together staffing, client records, onboarding, compliance, and operational oversight in one secure platform built for UK care providers.
-            </p>
-
-            <div className="mt-8 grid gap-3 sm:flex sm:flex-wrap sm:gap-4">
-              <Link href="/register" className="inline-flex items-center justify-center gap-2 rounded-full bg-sky-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-500">
-                Join COS <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link href="/login" className="rounded-full border border-slate-200 bg-white px-5 py-3 text-center text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50">Log in</Link>
-            </div>
-
-            <div className="mt-8 flex flex-wrap items-center gap-6 text-sm text-slate-500">
-              <div className="flex items-center gap-2"><Stethoscope className="h-4 w-4 text-sky-600" /> Care coordination</div>
-              <div className="flex items-center gap-2"><BriefcaseBusiness className="h-4 w-4 text-sky-600" /> Staff management</div>
-              <div className="flex items-center gap-2"><Users className="h-4 w-4 text-sky-600" /> Family visibility</div>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-10 grid gap-4 sm:grid-cols-3">
-          {featureCards.map(({ title, description, icon: Icon, accent }) => (
-            <div key={title} className="rounded-[26px] border border-slate-200 bg-white p-5 shadow-sm">
-              <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-2xl ${accent}`}>
-                <Icon className="h-5 w-5" />
+    <main className="min-h-screen bg-[#f6f8f6] text-slate-900">
+      <section className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-10">
+        <div className="overflow-hidden rounded-[32px] border border-slate-200 bg-white shadow-xl shadow-slate-200/50">
+          <div className="relative min-h-[560px] overflow-hidden bg-slate-900 px-6 py-8 text-white sm:px-10 lg:px-14">
+            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(15,23,42,.92)_0%,rgba(15,23,42,.7)_42%,rgba(15,23,42,.16)_100%),url('https://images.unsplash.com/photo-1576765608866-5b51046452be?auto=format&fit=crop&w=1800&q=85')] bg-cover bg-center" />
+            <div className="relative z-10 flex h-full min-h-[500px] flex-col">
+              <div className="flex items-center justify-between gap-4">
+                <Link href="/" className="flex items-center gap-3"><div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-sm font-bold text-sky-700 shadow-sm">COS</div><div><p className="text-[10px] uppercase tracking-[0.24em] text-sky-100">Care Organisation</p><p className="font-semibold">System</p></div></Link>
+                <Link href="/login" className="rounded-full border border-white/30 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10">Portal sign in</Link>
               </div>
-              <h3 className="text-xl font-semibold text-slate-900">{title}</h3>
-              <p className="mt-3 text-sm leading-6 text-slate-600">{description}</p>
+              <div className="mt-auto max-w-2xl pb-4 pt-20">
+                <div className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-sky-100 backdrop-blur-sm"><BadgeCheck className="h-3.5 w-3.5" /> Caring with confidence</div>
+                <h1 className="mt-5 max-w-2xl text-4xl font-semibold leading-tight tracking-tight sm:text-6xl">A welcoming place to live, work, and feel cared for.</h1>
+                <p className="mt-5 max-w-xl text-base leading-7 text-slate-200 sm:text-lg">COS supports safe, person-centred care and the people who make it possible across the UK care sector.</p>
+                <div className="mt-8 flex flex-wrap gap-3"><Link href="/register" className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-sky-50">Explore opportunities <ArrowRight className="h-4 w-4" /></Link><Link href="#services" className="rounded-full border border-white/30 px-5 py-3 text-sm font-semibold text-white hover:bg-white/10">Discover our care</Link></div>
+              </div>
             </div>
-          ))}
+          </div>
+
+          <div className="grid gap-6 px-6 py-8 sm:px-10 lg:grid-cols-[1.1fr_0.9fr] lg:px-14 lg:py-12">
+            <div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-700">Our approach</p><h2 className="mt-3 max-w-xl text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">Care that feels personal, dependable, and human.</h2><p className="mt-4 max-w-xl text-base leading-7 text-slate-600">Every person has their own story, preferences, and ambitions. Our care approach brings together capable teams, clear records, and meaningful relationships so people can live with dignity.</p></div>
+            <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1"><InfoRow icon={Users} title="People first" detail="Support shaped around individual needs" /><InfoRow icon={ShieldCheck} title="Trusted standards" detail="Clear, accountable care processes" /><InfoRow icon={BriefcaseBusiness} title="Strong teams" detail="A workplace built for development" /></div>
+          </div>
         </div>
 
-        <section className="mt-12 rounded-[30px] border border-sky-200 bg-sky-50 p-6 sm:p-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-700">UK care and healthcare recruitment</p>
-          <h3 className="mt-3 text-2xl font-semibold text-slate-900">Current employment enquiries</h3>
-          <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">We assist with enquiries for eligible vacancies, subject to successful recruitment, role availability, and applicable UK immigration requirements.</p>
-          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-            {[
-              "Care Worker · 6135",
-              "Senior Care Worker · 6136",
-              "Registered Nurse · 2231",
-              "Social Worker · 2461",
-              "Other eligible health and social care roles",
-            ].map((role) => <div key={role} className="rounded-xl border border-sky-100 bg-white p-3 text-sm font-medium text-slate-700">{role}</div>)}
-          </div>
-          <div className="mt-6 grid gap-4 border-t border-sky-200 pt-5 sm:grid-cols-2">
-            <p className="text-sm text-slate-600"><strong className="text-slate-900">Planned start date:</strong> 5 October 2026, subject to successful recruitment.</p>
-            <p className="text-sm text-slate-600"><strong className="text-slate-900">Processing fees:</strong> £300 for a 3-year contract or £500 for a 5-year contract.</p>
-          </div>
-          <p className="mt-5 text-xs leading-5 text-slate-500">Sponsorship and dependant eligibility are subject to the applicable UK immigration requirements. No employment or sponsorship outcome is guaranteed until the recruitment and eligibility process is complete.</p>
-        </section>
+        <section id="services" className="py-14"><div className="flex flex-wrap items-end justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-700">What we provide</p><h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-900">Support for every stage of care.</h2></div><a href="#contact" className="text-sm font-semibold text-sky-700 hover:text-sky-600">Talk to our team <ArrowRight className="ml-1 inline h-4 w-4" /></a></div><div className="mt-7 grid gap-4 md:grid-cols-3">{services.map(({ title, description, icon: Icon, tone }) => <div key={title} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm"><div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${tone}`}><Icon className="h-6 w-6" /></div><h3 className="mt-5 text-xl font-semibold text-slate-900">{title}</h3><p className="mt-3 text-sm leading-6 text-slate-600">{description}</p></div>)}</div></section>
 
-        <div className="mt-12 rounded-[30px] border border-slate-200 bg-slate-900 p-8 text-white shadow-xl shadow-slate-300/30">
-          <div className="grid gap-8 lg:grid-cols-[1fr_1.2fr] lg:items-center">
-            <div>
-              <p className="text-xs font-medium uppercase tracking-[0.2em] text-sky-300">Built for care providers</p>
-              <h3 className="mt-3 text-3xl font-semibold tracking-tight">Operational resilience without the admin burden.</h3>
-            </div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              {trustPoints.map((point) => (
-                <div key={point} className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-3 text-sm text-slate-200">
-                  <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-sky-500/20 text-sky-300">
-                    <ArrowRight className="h-3 w-3" />
-                  </span>
-                  <span>{point}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        <section className="rounded-[30px] bg-sky-900 px-6 py-8 text-white shadow-xl shadow-slate-300/30 sm:px-10 sm:py-10"><div className="grid gap-8 lg:grid-cols-[1fr_1.2fr] lg:items-center"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-200">Join our care community</p><h2 className="mt-3 text-3xl font-semibold tracking-tight">Build a meaningful career in UK care.</h2><p className="mt-4 max-w-lg text-sm leading-6 text-sky-100">We assist with enquiries for eligible vacancies, subject to successful recruitment, role availability, and applicable UK immigration requirements.</p><Link href="/register" className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-sky-900 hover:bg-sky-50">Start an application <ArrowRight className="h-4 w-4" /></Link></div><div className="grid gap-3 sm:grid-cols-2">{recruitmentRoles.map((role) => <div key={role} className="rounded-2xl border border-white/15 bg-white/10 p-4 text-sm text-white">{role}</div>)}<div className="rounded-2xl border border-white/15 bg-white/10 p-4 text-sm text-sky-100 sm:col-span-2">Planned start date: 5 October 2026, subject to successful recruitment.</div></div></div></section>
+
+        <section id="contact" className="flex flex-col gap-5 py-12 sm:flex-row sm:items-center sm:justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-700">Contact and support</p><h2 className="mt-2 text-2xl font-semibold text-slate-900">Ready to take the next step?</h2><p className="mt-2 text-sm text-slate-600">Sign in to your portal or begin your application today.</p></div><div className="flex flex-wrap gap-3"><Link href="/login" className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"><Phone className="h-4 w-4" /> Portal sign in</Link><Link href="/register" className="inline-flex items-center gap-2 rounded-full bg-sky-600 px-5 py-3 text-sm font-semibold text-white hover:bg-sky-500">Apply now <ArrowRight className="h-4 w-4" /></Link></div></section>
+        <p className="border-t border-slate-200 py-6 text-xs leading-5 text-slate-500">Sponsorship and dependant eligibility are subject to applicable UK immigration requirements. No employment or sponsorship outcome is guaranteed until recruitment and eligibility checks are complete.</p>
       </section>
     </main>
   );
 }
+
+function InfoRow({ icon: Icon, title, detail }: { icon: typeof Users; title: string; detail: string }) { return <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4"><div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-sky-700 shadow-sm"><Icon className="h-5 w-5" /></div><div><p className="text-sm font-semibold text-slate-900">{title}</p><p className="mt-1 text-xs text-slate-500">{detail}</p></div></div>; }
