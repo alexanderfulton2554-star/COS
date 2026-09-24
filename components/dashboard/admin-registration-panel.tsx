@@ -16,6 +16,8 @@ type Registration = {
   paymentStatus?: string;
   paymentNetwork?: string | null;
   paymentTxHash?: string | null;
+  contractYears?: number | null;
+  paymentAmountPence?: number | null;
   user?: {
     firstName?: string | null;
     lastName?: string | null;
@@ -170,6 +172,12 @@ export function AdminRegistrationPanel() {
                       <button onClick={() => verifyPayment(application.id, "REJECT")} className="rounded-lg border border-red-200 bg-white px-3 py-2 text-xs font-semibold text-red-700 hover:bg-red-50">Reject payment</button>
                     </div>
                   )}
+                </div>
+              )}
+              {application.contractYears && application.paymentAmountPence && (
+                <div className="mt-3 rounded-xl bg-white p-3 text-sm text-slate-600">
+                  <span className="block text-xs uppercase tracking-[0.2em] text-slate-500">Selected contract fee</span>
+                  {application.contractYears} years · £{(application.paymentAmountPence / 100).toFixed(0)}
                 </div>
               )}
             </div>

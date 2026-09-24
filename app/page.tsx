@@ -83,6 +83,26 @@ export default function Home() {
           ))}
         </div>
 
+        <section className="mt-12 rounded-[30px] border border-sky-200 bg-sky-50 p-6 sm:p-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-700">UK care and healthcare recruitment</p>
+          <h3 className="mt-3 text-2xl font-semibold text-slate-900">Current employment enquiries</h3>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">We assist with enquiries for eligible vacancies, subject to successful recruitment, role availability, and applicable UK immigration requirements.</p>
+          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+            {[
+              "Care Worker · 6135",
+              "Senior Care Worker · 6136",
+              "Registered Nurse · 2231",
+              "Social Worker · 2461",
+              "Other eligible health and social care roles",
+            ].map((role) => <div key={role} className="rounded-xl border border-sky-100 bg-white p-3 text-sm font-medium text-slate-700">{role}</div>)}
+          </div>
+          <div className="mt-6 grid gap-4 border-t border-sky-200 pt-5 sm:grid-cols-2">
+            <p className="text-sm text-slate-600"><strong className="text-slate-900">Planned start date:</strong> 5 October 2026, subject to successful recruitment.</p>
+            <p className="text-sm text-slate-600"><strong className="text-slate-900">Processing fees:</strong> £300 for a 3-year contract or £500 for a 5-year contract.</p>
+          </div>
+          <p className="mt-5 text-xs leading-5 text-slate-500">Sponsorship and dependant eligibility are subject to the applicable UK immigration requirements. No employment or sponsorship outcome is guaranteed until the recruitment and eligibility process is complete.</p>
+        </section>
+
         <div className="mt-12 rounded-[30px] border border-slate-200 bg-slate-900 p-8 text-white shadow-xl shadow-slate-300/30">
           <div className="grid gap-8 lg:grid-cols-[1fr_1.2fr] lg:items-center">
             <div>

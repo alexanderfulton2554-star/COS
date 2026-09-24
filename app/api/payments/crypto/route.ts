@@ -9,7 +9,7 @@ const addresses = {
 } as const;
 
 export async function GET() {
-  return NextResponse.json({ asset: "USDT", amountUsd: 50, addresses });
+  return NextResponse.json({ asset: "USDT", currency: "GBP", options: [{ years: 3, amount: 30000 }, { years: 5, amount: 50000 }], addresses });
 }
 
 export async function POST(request: Request) {
@@ -21,10 +21,11 @@ export async function POST(request: Request) {
     const body = await request.json();
     const applicationRef = typeof body.applicationRef === "string" ? body.applicationRef.trim() : "";
     const network = body.network === "TRC20" || body.network === "BEP20" ? body.network : "";
+    const contractYears = body.contractYears === 3 || body.contractYears === 5 ? body.contractYears : 0;
     const txHash = typeof body.txHash === "string" ? body.txHash.trim() : "";
 
-    if (!applicationRef || !network || !txHash) {
-      return NextResponse.json({ error: "Application reference, network, and transaction hash are required." }, { status: 400 });
+    if (!applicationRef || !network || !contractYears || !txHash) {
+      return NextResponse.json({ error: "Application reference, contract term, network, and transaction hash are required." }, { status: 400 });
     }
 
     if (!/^[a-zA-Z0-9]{32,128}$/.test(txHash)) {
@@ -51,7 +52,7 @@ export async function POST(request: Request) {
 
     await prisma.registrationApplication.update({
       where: { id: application.id },
-      data: { paymentNetwork: network, paymentTxHash: txHash, paymentStatus: "PENDING" },
+      data: { paymentNetwork: network, paymentTxHash: txHash, contractYears, paymentAmountPence: contractYears === 3 ? 30000 : 50000, paymentStatus: "PENDING" },
     });
 
     return NextResponse.json({ success: true, message: "Payment submitted for admin verification." });

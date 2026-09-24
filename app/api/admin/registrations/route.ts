@@ -20,6 +20,8 @@ export async function GET() {
         paymentStatus: true,
         paymentNetwork: true,
         paymentTxHash: true,
+        contractYears: true,
+        paymentAmountPence: true,
         user: {
           select: { id: true, firstName: true, lastName: true, email: true, phone: true, isActive: true },
         },

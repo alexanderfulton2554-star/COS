@@ -219,6 +219,8 @@ model RegistrationApplication {
   paymentStatus      PaymentStatus      @default(PENDING)
   paymentNetwork     CryptoNetwork?
   paymentTxHash      String?            @unique
+  contractYears      Int?
+  paymentAmountPence Int?
   paidAt             DateTime?
   adminNotes         String?
   submittedAt        DateTime?

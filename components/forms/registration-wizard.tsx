@@ -420,7 +420,7 @@ export function RegistrationWizard() {
             <h3 className="mt-4 text-2xl font-semibold text-slate-900">Registration submitted successfully.</h3>
             <p className="mt-2 text-slate-600">Application reference: {applicationRef}</p>
             <p className="mt-1 text-slate-600">Status: Pending admin review</p>
-            <p className="mt-3 text-sm text-slate-600">Please wait for an administrator to accept your application. The $50 registration fee will become available after approval.</p>
+            <p className="mt-3 text-sm text-slate-600">Please wait for an administrator to accept your application. After approval, processing is £300 for a 3-year contract or £500 for a 5-year contract.</p>
             <Link href="/login" className="mt-6 inline-flex rounded-full bg-sky-600 px-4 py-2 text-sm font-semibold text-white hover:bg-sky-500">Continue to sign in</Link>
           </div>
         );
