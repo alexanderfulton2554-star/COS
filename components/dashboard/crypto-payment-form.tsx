@@ -53,7 +53,7 @@ export function CryptoPaymentForm({ applicationRef }: { applicationRef: string }
         <p className="mt-2 break-all font-mono text-xs text-slate-700">{addresses[network]}</p>
       </div>
       <input value={txHash} onChange={(event) => setTxHash(event.target.value)} required placeholder="Paste transaction hash" className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-xs text-slate-900 outline-none focus:border-sky-500" />
-      <button type="submit" disabled={loading} className="rounded-xl bg-sky-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-sky-500 disabled:opacity-60">{loading ? "Submitting..." : "Submit transaction for review"}</button>
+      <button type="submit" disabled={loading} className="w-full rounded-xl bg-sky-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-sky-500 disabled:opacity-60">{loading ? "Submitting..." : "Submit transaction for review"}</button>
       {message && <p className="text-xs text-slate-600">{message}</p>}
     </form>
   );
